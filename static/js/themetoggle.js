@@ -10,9 +10,6 @@ function toggleTheme() {
     if (currentTheme === "light") {
         setTheme("dark");
         updateItemToggleTheme();
-    } else if (currentTheme === "dark") {
-        setTheme("auto");
-        updateItemToggleTheme();
     } else {
         setTheme("light");
         updateItemToggleTheme();
