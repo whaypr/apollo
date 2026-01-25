@@ -5,23 +5,29 @@
                 <img alt="{{ config.title }}" src="{{ get_url(path=config.extra.logo) }}" />
             </a>
         {% else %}
-            <a href={{ config.base_url }}>{{ config.title }}</a>
+            {% set current_path = current_path | default(value="/") %}
+            {% if current_path != "/" %}
+                <a href={{ config.base_url }}>{{ config.title }}</a>
+            {% endif %}
         {% endif %}
 
 
-        <div class="socials">
-            {% if config.markdown.external_links_target_blank %}
-                {% set link_attrs = "rel='me noopener' target='_blank'" %}
-            {% else %}
-                {% set link_attrs = "rel='me'" %}
+        {% set current_path = current_path | default(value="/") %}
+            {% if current_path != "/" %}
+                <div class="socials">
+                    {% if config.markdown.external_links_target_blank %}
+                        {% set link_attrs = "rel='me noopener' target='_blank'" %}
+                    {% else %}
+                        {% set link_attrs = "rel='me'" %}
+                    {% endif %}
+                    {% for social in config.extra.socials %}
+                        <a {{ link_attrs | safe }} href="{{ social.url }}" class="social">
+                            <img alt="{{ social.name }}"
+                                src="{{ get_url(path='icons/social/' ~ social.icon ~ '.svg') }}" />
+                        </a>
+                    {% endfor %}
+                </div>
             {% endif %}
-            {% for social in config.extra.socials %}
-                <a {{ link_attrs | safe }} href="{{ social.url }}" class="social">
-                    <img alt="{{ social.name }}"
-                         src="{{ get_url(path='icons/social/' ~ social.icon ~ '.svg') }}" />
-                </a>
-            {% endfor %}
-        </div>
     </div>
 
     <div class="right-nav">
