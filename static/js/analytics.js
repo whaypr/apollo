@@ -1,9 +1,18 @@
 function detectSource() {
     const p = new URLSearchParams(location.search);
 
-    // UTMs (highest priority)
+    // Path-based sources (highest priority)
+    if (p.has("g")) return "github";
+    if (p.has("l")) return "linkedin";
+    if (p.has("i")) return "instagram";
+    if (p.has("f")) return "facebook";
+    if (p.has("d")) return "discord";
+    if (p.has("x")) return "twitter";
+    if (p.has("u")) return "usermap";
+
+    // UTMs
     const utmSource = p.get("utm_source");
-    if (utmSource === "ig") return "instagram"; // normalize with the referrer-based source name
+    if (utmSource === "ig") return "instagram"; // normalize with other sources
     if (utmSource) return utmSource;
 
     // Referrers
@@ -16,21 +25,19 @@ function detectSource() {
     if (ref.includes("reddit.com") || ref.includes("old.reddit.com")) return "reddit";
     if (ref.includes("youtube.com") || ref.includes("youtu.be")) return "youtube";
     if (ref.includes("news.ycombinator.com")) return "hackernews";
-    if (!ref) return "direct";
 
-    return "other";
+    return "direct";
 }
 
 document.addEventListener("DOMContentLoaded", function() {
     const p = new URLSearchParams(location.search);
 
     const source = detectSource();
-    const content = p.get("utm_content");
 
     if (!source) return;
 
     goatcounter.count({
         event: true,
-        path: `source/${source}/${content || ""}`
+        path: `source/${source}`
     });
 });
